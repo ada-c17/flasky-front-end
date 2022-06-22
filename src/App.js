@@ -1,13 +1,34 @@
 import './App.css';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import CatList from './components/CatList';
-import catData from "./data/catData.json";
+import axios from 'axios';
 
 // Moved Cat and Dog data into 'data' folder
+export const URL = 'http://localhost:5000/cats';
 
 function App() {
 
-  const [cats, setCats] = useState(catData);
+  const [cats, setCats] = useState([]);
+  const [status, setStatus] = useState('Loading...');
+
+  useEffect(()=>{
+    axios
+      .get(URL)
+      .then((response)=>{
+        const newCats = response.data.map((cat) => {
+          return {
+            name: cat.name, 
+            id: cat.id,
+            personality: cat.personality
+          };
+        });
+        setStatus("Loaded");
+        setCats(newCats)
+      })
+      .catch((err)=>{
+        console.log(err);
+      });
+  }, [])
 
   const onRemove = (id) => {
     //this will alter cat data based on cat's id

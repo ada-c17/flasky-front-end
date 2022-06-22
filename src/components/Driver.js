@@ -17,6 +17,7 @@ const Driver = (props) => {
       <ul>
         <li>Team: {props.team}</li>
         <li>Country: {props.country}</li>
+        <li>Cars: {props.cars}</li>
         <li>Handsome: {props.handsome ? "Hella fine" : "Not for me"}</li>
         <button onClick={flipMyHandsome}>Change Handsomeness</button>
         <button onClick={deleteMe}>Delete</button>
@@ -33,9 +34,10 @@ const Driver = (props) => {
 
 Driver.propTypes = {
   name: PropTypes.string.isRequired,
-  team: PropTypes.string,
+  team: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
-  handsome: PropTypes.bool,
+  handsome: PropTypes.bool.isRequired,
+  cars: PropTypes.array.isRequired
 };
 
 export default Driver;

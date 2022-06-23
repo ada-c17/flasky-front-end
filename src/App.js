@@ -2,6 +2,7 @@
     import axios from "axios";
     import CatList from "./components/CatList";
     import Cat from "./components/Cat";
+    import CatForm from "./components/CatForm";
     import { useEffect, useState } from "react";
 
     function App() {
@@ -26,10 +27,14 @@
     const [cats, setCats] = useState([]);
 
     useEffect(() => {
+        getDataFromAPI();
+    }, []);
+
+    const getDataFromAPI = () => {
         axios.get("http://127.0.0.1:5000/cats")
             .then((response) => {setCats(response.data)})
             .catch((error) => {console.log("OH NOES OH NOES!")});
-    }, []);
+    }
 
     const handleAppClick = () => {
         setPlaceholder(placeholder + "!");
@@ -80,6 +85,17 @@
         // setCats(olderCats);
     };
 
+    const createCat = (newCatData) => {
+        console.log(newCatData);
+        axios.post('http://127.0.0.1:5000/cats', newCatData)
+            .then((response) => {
+                /*
+                const updateCats = [...cats];
+                updateCats.push(newCatData)*/
+                getDataFromAPI()
+            }).catch((error) => {console.log("DISASTER")});
+    }
+
     return (
         <div className="App">
         <header className="App-header">
@@ -92,6 +108,7 @@
             setCatAgeCallback={setCatAge}
             deleteCatCallback={deleteCat}
             />
+            <CatForm createCatCallback={createCat} />
             {/* <CatList catData={catData2} /> */}
         </main>
         </div>

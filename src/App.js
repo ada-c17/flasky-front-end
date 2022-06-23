@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react";
 import DriverList from "./components/DriverList";
 import axios from "axios";
+import DriverForm from "./components/DriverForm";
 
 function App() {
   const [drivers, setDrivers] = useState([]);
 
-  const URL = 'http://localhost:5000/drivers';
+  const URL = "http://localhost:5000/drivers";
 
-  useEffect(() => {
-    axios.get(URL)
-    .then((res) => {
-      const newDrivers = res.data.map((driver) => {
-        return {
-          id: driver.id,
-          name: driver.name,
-          country: driver.country,
-          team: driver.team,
-          cars: driver.cars,
-          handsome: driver.handsome
-        };
+  const fetchDrivers = () => {
+    axios
+      .get(URL)
+      .then((res) => {
+        const newDrivers = res.data.map((driver) => {
+          return {
+            id: driver.id,
+            name: driver.name,
+            country: driver.country,
+            team: driver.team,
+            cars: driver.cars,
+            handsome: driver.handsome,
+          };
+        });
+        setDrivers(newDrivers);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      setDrivers(newDrivers);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }, []);
+  };
+
+  useEffect(fetchDrivers, []);
 
   const flipHandsome = (id) => {
     // const newDrivers = [];
@@ -41,7 +45,7 @@ function App() {
       .then(() => {
         const newDrivers = [];
         for (const driver of drivers) {
-          const newDriver = {...driver};
+          const newDriver = { ...driver };
           if (newDriver.id === id) {
             newDriver.handsome = !newDriver.handsome;
           }
@@ -52,8 +56,6 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-
-    
   };
 
   const deleteDriver = (id) => {
@@ -67,9 +69,21 @@ function App() {
           }
         }
         setDrivers(newDrivers);
-       })
-       .catch((err) => {
-          console.log(err);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addDriver = (driverInfo) => {
+    axios
+      .post(URL, driverInfo)
+      .then((response) => {
+        console.log(response);
+        fetchDrivers();
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   /*
@@ -85,6 +99,7 @@ function App() {
         handsomeCallback={flipHandsome}
         deleteCallback={deleteDriver}
       />
+      <DriverForm addDriverCallback={addDriver} />
     </div>
   );
 }

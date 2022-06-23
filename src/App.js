@@ -1,6 +1,7 @@
 import './App.css';
 import React, {useState, useEffect} from 'react';
 import CatList from './components/CatList';
+import NewCatForm from './components/NewCatForm';
 import axios from 'axios';
 
 // Moved Cat and Dog data into 'data' folder
@@ -39,11 +40,22 @@ function App() {
     //newCats holds our new array of cats
     setCats(newCats);
   }
+
+  const addCat = newCatData => {
+    axios.post(URL, newCatData)
+    .then((response) => {
+      const newCats = [...cats];
+      newCats.push({id: response.data.id, ...newCatData});
+      setCats(newCats);
+    })
+    .catch((error) => console.log(error));
+  }
   
   return (
     <main>
       <h1>The Cat Corral</h1>
       <CatList catData={cats} onRemove={onRemove}></CatList>
+      <NewCatForm addCatCallback={addCat}></NewCatForm>
     </main>
   );
 }

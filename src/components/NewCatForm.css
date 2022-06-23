@@ -1,0 +1,20 @@
+.new-cat__form {
+    display: flex;
+    justify-content: center;
+}
+
+.new-cat__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 400px;
+    row-gap: 20px;
+}
+
+.new-cat__fields label {
+    font-weight: bolder;
+    font-size: 1.2em;
+}
+
+.new-cat__submit {
+    grid-column: span 2;
+}
